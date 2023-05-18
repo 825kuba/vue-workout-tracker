@@ -1,12 +1,80 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/history">History</router-link> |
+    <router-link to="/">Workout</router-link> |
+    <router-link to="/exercises">Exercises</router-link>
   </nav>
-  <router-view/>
+  <router-view :exercises="exercises" @add-exercise="addExercise" />
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      exercises: [
+        {
+          name: 'Running',
+          type: 'cardio',
+          id: 1,
+          properties: {
+            time: {
+              minutes: 0,
+              seconds: 0,
+            },
+            distance: {
+              km: 0,
+              m: 0,
+            },
+          },
+        },
+        {
+          name: 'Push up',
+          type: 'strength',
+          id: 2,
+          properties: {
+            weight: 0,
+            reps: 0,
+          },
+        },
+      ],
+    };
+  },
+  methods: {
+    addExercise(data) {
+      console.log('adding exercise');
+      const newExercise = data;
+      newExercise.id = this.exercises.length + 1;
+      if (newExercise.type === 'strength') {
+        newExercise.properties = {
+          weight: 0,
+          reps: 0,
+        };
+      } else if (newExercise.type === 'cardio') {
+        newExercise.properties = {
+          time: {
+            minutes: 0,
+            seconds: 0,
+          },
+          distance: {
+            km: 0,
+            m: 0,
+          },
+        };
+      }
+      this.exercises = [...this.exercises, data];
+      console.log(this.exercises);
+    },
+  },
+};
+</script>
+
 <style lang="scss">
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
