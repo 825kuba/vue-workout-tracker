@@ -18,13 +18,18 @@
         <option value="strength">Strength Training</option>
       </select>
     </fieldset>
-    <button>Add exercise</button>
+    <Button text="Add new exercise" color="green"></Button>
   </form>
 </template>
 
 <script>
+import Button from '@/components/Button.vue';
+
 export default {
   name: 'AddExercise',
+  components: {
+    Button,
+  },
   emits: ['add-exercise'],
   data() {
     return {
@@ -52,12 +57,14 @@ export default {
 
 <style scoped>
 form {
-  margin-top: 20px;
-  padding: 0 20px;
+  margin: 20px 0 50px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 fieldset {
-  padding: 10px 0;
+  /* padding: 10px 0; */
   border: none;
   display: flex;
   gap: 5px;
@@ -73,17 +80,5 @@ select {
 
 label {
   font-weight: bold;
-}
-
-button {
-  cursor: pointer;
-  background-color: #42b983;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 18px;
-  /* text-transform: uppercase; */
-  margin-top: 20px;
-  width: 100%;
 }
 </style>

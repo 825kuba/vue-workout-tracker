@@ -3,9 +3,10 @@
     <h1>List of exercises</h1>
     <aside>
       <Button
-        :text="`${showAddNew ? 'Hide' : 'Add New Excercise'}`"
-        @click="toggleShowForm"
-      />
+        :text="`${showAddNew ? 'Cancel' : 'Add New Excercise'}`"
+        :color="`${showAddNew ? 'red' : 'green'}`"
+        @btn-click="$emit('toggle-show-add-new')"
+      ></Button>
       <AddExercise v-if="showAddNew" @add-exercise="passObj" />
     </aside>
     <main>
@@ -16,7 +17,6 @@
 
 <script>
 import AddExercise from '@/components/AddExercise.vue';
-// import Exercise from '@/components/Exercise.vue';
 import ListContainer from '@/components/ListContainer.vue';
 import Button from '@/components/Button.vue';
 
@@ -24,25 +24,18 @@ export default {
   name: 'ExercisesView',
   components: {
     AddExercise,
-    // Exercise,
     ListContainer,
     Button,
   },
-  emits: ['add-exercise'],
+  emits: ['add-exercise', 'toggle-show-add-new'],
   props: {
     exercises: Array,
+    showAddNew: Boolean,
   },
-  data() {
-    return {
-      showAddNew: false,
-    };
-  },
+
   methods: {
     passObj(obj) {
       this.$emit('add-exercise', obj);
-    },
-    toggleShowForm() {
-      this.showAddNew = !this.showAddNew;
     },
   },
 };
@@ -50,7 +43,7 @@ export default {
 
 <style scoped>
 .exercises {
-  padding: 0 20px;
+  padding: 0 30px 30px 30px;
 }
 
 h1 {

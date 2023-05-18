@@ -4,7 +4,12 @@
     <router-link to="/">Workout</router-link> |
     <router-link to="/exercises">Exercises</router-link>
   </nav>
-  <router-view :exercises="exercises" @add-exercise="addExercise" />
+  <router-view
+    :exercises="exercises"
+    @add-exercise="addExercise"
+    :showAddNew="showAddNew"
+    @toggle-show-add-new="toggleShowAddNew"
+  />
 </template>
 
 <script>
@@ -37,9 +42,13 @@ export default {
           },
         },
       ],
+      showAddNew: false,
     };
   },
   methods: {
+    toggleShowAddNew() {
+      this.showAddNew = !this.showAddNew;
+    },
     addExercise(data) {
       console.log('adding exercise');
       const newExercise = data;
