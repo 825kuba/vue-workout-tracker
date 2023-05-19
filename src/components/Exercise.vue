@@ -1,13 +1,14 @@
 <template>
-  <div class="exercise">
-    <span>{{ firstLetter }}</span>
+  <li class="exercise" @click="checkExercise">
+    <span class="exercise__letter">{{ firstLetter }}</span>
     <div class="exercise__content">
       <p class="name">
         {{ exercise.name }}
       </p>
       <p class="type">{{ exercise.type }}</p>
     </div>
-  </div>
+    <span v-if="checkIfChecked" class="exercise__tick">✔</span>
+  </li>
 </template>
 
 <script>
@@ -16,10 +17,27 @@ export default {
   props: {
     exercise: Object,
   },
+  emit: ['check-exercise'],
   data() {
     return {
       firstLetter: `${this.exercise.name.slice(0, 1).toUpperCase()}`,
     };
+  },
+  methods: {
+    checkExercise() {
+      const parent = `${this.$parent.$parent.$options.name}`;
+      this.$emit('check-exercise', this.exercise, parent);
+    },
+  },
+  computed: {
+    checkIfChecked() {
+      const parent = this.$parent.$parent.$options.name;
+      if (parent === 'ExercisesView') {
+        return this.exercise.checked.forDelete;
+      } else if (parent === 'HomeView') {
+        return this.exercise.checked.forAdd;
+      } else return false;
+    },
   },
 };
 </script>
@@ -28,21 +46,33 @@ export default {
 .exercise {
   display: flex;
   border-bottom: 1px solid gray;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 15px 10px;
+  cursor: pointer;
+  // transition: 0.15s ease-in-out background-color;
+
+  &:hover {
+    background-color: rgb(241, 241, 241);
+    // background-color: rgb(77, 77, 248, 0.1);
+  }
 
   &:first-of-type {
     border-top: 1px solid gray;
   }
 
   & span {
-    flex: 1;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    // padding: 0 10px;
     font-weight: bold;
+  }
+
+  &__letter {
+    justify-content: flex-start;
+    padding: 0 20px 0 0;
     font-size: 25px;
+  }
+
+  &__tick {
+    justify-content: flex-end;
   }
 
   &__content {

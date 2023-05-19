@@ -18,7 +18,7 @@
         <option value="strength">Strength Training</option>
       </select>
     </fieldset>
-    <Button text="Add new exercise" color="green"></Button>
+    <Button text="Add exercise" styles="green"></Button>
   </form>
 </template>
 
@@ -57,10 +57,10 @@ export default {
 
 <style scoped>
 form {
-  margin: 20px 0 50px 0;
+  /* margin: 30px 0; */
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
 }
 
 fieldset {
