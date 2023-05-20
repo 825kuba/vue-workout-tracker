@@ -54,7 +54,6 @@ export default {
         properties: { ...this.exercise.properties },
       };
       this.sets.push(set);
-      console.log(this.sets);
       this.counter++;
     },
   },

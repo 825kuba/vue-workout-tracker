@@ -38,7 +38,7 @@ export default {
         {
           name: 'Running',
           type: 'cardio',
-          id: 1,
+          id: crypto.randomUUID(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -51,7 +51,7 @@ export default {
         {
           name: 'Push up',
           type: 'strength',
-          id: 2,
+          id: crypto.randomUUID(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -64,7 +64,7 @@ export default {
         {
           name: 'Cycling',
           type: 'cardio',
-          id: 3,
+          id: crypto.randomUUID(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -77,7 +77,7 @@ export default {
         {
           name: 'Squat',
           type: 'strength',
-          id: 4,
+          id: crypto.randomUUID(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -90,7 +90,7 @@ export default {
         {
           name: 'Deadlift',
           type: 'strength',
-          id: 5,
+          id: crypto.randomUUID(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -103,7 +103,7 @@ export default {
         {
           name: 'Pull up',
           type: 'strength',
-          id: 6,
+          id: crypto.randomUUID(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -132,8 +132,9 @@ export default {
       this.isWorkingOut = true;
       this.workout.startTime = Date.now();
       this.workout.exercises = [];
+      this.workout.id = crypto.randomUUID();
       this.workout.checked = false;
-      console.log(this.workout);
+      console.log('current workout: ', this.workout);
     },
     endWorkout() {
       this.isWorkingOut = false;
@@ -150,7 +151,7 @@ export default {
     },
     addExercise(data) {
       const newExercise = data;
-      newExercise.id = this.exercises.length + 1;
+      newExercise.id = crypto.randomUUID();
       newExercise.checked = {
         forDelete: false,
         forAdd: false,
@@ -167,6 +168,7 @@ export default {
         };
       }
       this.exercises = [...this.exercises, data];
+      console.log('exercises: ', this.exercises);
     },
     checkExercise(exercise, parent) {
       const index = this.exercises.findIndex(item => item.id === exercise.id);
@@ -185,7 +187,7 @@ export default {
     addExercisesToWorkout() {
       this.exercises.forEach(item => {
         if (item.checked.forAdd) {
-          const newItem = { ...item, id: this.workout.exercises.length + 1 };
+          const newItem = { ...item, id: crypto.randomUUID() };
           this.workout.exercises.push(newItem);
         }
       });
@@ -197,11 +199,10 @@ export default {
         item => item.id === exercise.id
       );
       this.workout.exercises[index].sets = exercise.sets;
-      console.log('App:', this.workout);
+      console.log('updated sets:', this.workout);
     },
     finishWorkout() {
       this.workout.finishTime = Date.now();
-      this.workout.id = this.history.length + 1;
       this.history.push(this.workout);
       this.endWorkout();
       console.log('history: ', this.history);
@@ -209,7 +210,7 @@ export default {
     checkWorkout(workout) {
       const index = this.history.findIndex(item => item.id === workout.id);
       this.history[index].checked = !this.history[index].checked;
-      console.log(this.history);
+      console.log('history: ', this.history);
     },
     deleteWorkouts() {
       alert('Delete selected?');
