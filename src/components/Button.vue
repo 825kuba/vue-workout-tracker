@@ -36,6 +36,11 @@ button {
     color: white;
   }
 
+  &.gray {
+    background-color: rgb(199, 199, 199);
+    color: black;
+  }
+
   &.floating {
     position: fixed;
     left: 50;

@@ -17,6 +17,7 @@
     @check-exercise="checkExercise"
     @delete-exercises="deleteExercises"
     @add-exercises-to-workout="addExercisesToWorkout"
+    @update-exercise-sets="updateExerciseSets"
     @finish-workout="finishWorkout"
   />
 </template>
@@ -40,14 +41,8 @@ export default {
             forAdd: false,
           },
           properties: {
-            time: {
-              minutes: 0,
-              seconds: 0,
-            },
-            distance: {
-              km: 0,
-              m: 0,
-            },
+            time: '',
+            km: '',
           },
         },
         {
@@ -59,8 +54,8 @@ export default {
             forAdd: false,
           },
           properties: {
-            weight: 0,
-            reps: 0,
+            kg: '',
+            reps: '',
           },
         },
         {
@@ -72,14 +67,8 @@ export default {
             forAdd: false,
           },
           properties: {
-            time: {
-              minutes: 0,
-              seconds: 0,
-            },
-            distance: {
-              km: 0,
-              m: 0,
-            },
+            time: '',
+            km: '',
           },
         },
         {
@@ -91,8 +80,8 @@ export default {
             forAdd: false,
           },
           properties: {
-            weight: 0,
-            reps: 0,
+            kg: '',
+            reps: '',
           },
         },
         {
@@ -104,8 +93,8 @@ export default {
             forAdd: false,
           },
           properties: {
-            weight: 0,
-            reps: 0,
+            kg: '',
+            reps: '',
           },
         },
         {
@@ -117,8 +106,8 @@ export default {
             forAdd: false,
           },
           properties: {
-            weight: 0,
-            reps: 0,
+            kg: '',
+            reps: '',
           },
         },
       ],
@@ -133,10 +122,14 @@ export default {
         alert('Cancel workout?');
         this.endWorkout();
       } else {
-        this.isWorkingOut = true;
-        this.workout.time = Date.now();
-        console.log(this.workout.time);
+        this.startWorkout();
       }
+    },
+    startWorkout() {
+      this.isWorkingOut = true;
+      this.workout.startTime = Date.now();
+      this.workout.exercises = [];
+      console.log(this.workout);
     },
     endWorkout() {
       this.isWorkingOut = false;
@@ -154,22 +147,19 @@ export default {
     addExercise(data) {
       const newExercise = data;
       newExercise.id = this.exercises.length + 1;
-      newExercise.checked = false;
+      newExercise.checked = {
+        forDelete: false,
+        forAdd: false,
+      };
       if (newExercise.type === 'strength') {
         newExercise.properties = {
-          weight: 0,
-          reps: 0,
+          kg: '',
+          reps: '',
         };
       } else if (newExercise.type === 'cardio') {
         newExercise.properties = {
-          time: {
-            minutes: 0,
-            seconds: 0,
-          },
-          distance: {
-            km: 0,
-            m: 0,
-          },
+          time: '',
+          km: '',
         };
       }
       this.exercises = [...this.exercises, data];
@@ -189,20 +179,28 @@ export default {
       this.exercises = this.exercises.filter(item => !item.checked.forDelete);
     },
     addExercisesToWorkout() {
-      let addedExercises = [];
       this.exercises.forEach(item => {
         if (item.checked.forAdd) {
-          addedExercises.push(item);
+          const newItem = { ...item, id: this.workout.exercises.length + 1 };
+          this.workout.exercises.push(newItem);
         }
       });
-      this.workout.exercises = [...addedExercises];
       console.log('workout exercises:', this.workout.exercises);
       this.toggleIsSelectingExercise();
     },
+    updateExerciseSets(exercise) {
+      const index = this.workout.exercises.findIndex(
+        item => item.id === exercise.id
+      );
+      this.workout.exercises[index].sets = exercise.sets;
+      console.log('App:', this.workout);
+    },
     finishWorkout() {
-      console.log('finished');
-      // do stuff
+      this.workout.finishTime = Date.now();
+      this.workout.id = this.history.length + 1;
+      this.history.push(this.workout);
       this.endWorkout();
+      console.log('history: ', this.history);
     },
   },
 };
@@ -240,5 +238,23 @@ nav {
 .history,
 .home {
   padding: 0 30px 90px 30px;
+}
+
+ul {
+  list-style: none;
+}
+
+// for now - instead of some responsive design
+#app {
+  max-width: 768px;
+}
+
+button {
+  max-width: calc(768px - 60px);
+}
+
+#app,
+button {
+  margin: 0 auto;
 }
 </style>

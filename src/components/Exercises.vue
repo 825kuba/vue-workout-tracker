@@ -30,7 +30,6 @@ export default {
 </script>
 
 <style scoped>
-.exercises-container {
-  list-style: none;
-}
+/* .exercises {
+} */
 </style>

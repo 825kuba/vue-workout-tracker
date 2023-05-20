@@ -5,7 +5,11 @@
       :styles="`${isWorkingOut ? 'red' : 'blue'} big-font`"
       @btn-click="$emit('toggle-isWorkingOut')"
     ></Button>
-    <Workout v-if="isWorkingOut" :workout="workout"/>
+    <Workout
+      v-if="isWorkingOut"
+      :workout="workout"
+      @update-exercise-sets="emitUpdateExerciseSets"
+    />
     <Button
       v-if="isWorkingOut"
       :text="`${isSelectingExercise ? 'Cancel' : 'Add exercise'}`"
@@ -17,6 +21,7 @@
         v-if="isWorkingOut && isSelectingExercise"
         :exercises="exercises"
         @check-exercise="emitCheckExercise"
+        :workout="workout"
       />
       <Button
         v-if="checkIfSomeChecked"
@@ -27,7 +32,7 @@
       ></Button>
     </aside>
     <Button
-      v-if="isWorkingOut"
+      v-if="isWorkingOut && workout.exercises.length"
       text="Finish workout"
       class="blue big-font"
       @btn-click="$emit('finish-workout')"
@@ -59,10 +64,14 @@ export default {
     'check-exercise',
     'add-exercises-to-workout',
     'finish-workout',
+    'update-exercise-sets',
   ],
   methods: {
     emitCheckExercise(exercise, parent) {
       this.$emit('check-exercise', exercise, parent);
+    },
+    emitUpdateExerciseSets(exercise) {
+      this.$emit('update-exercise-sets', exercise);
     },
   },
   computed: {
