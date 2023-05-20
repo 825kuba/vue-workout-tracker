@@ -83,9 +83,9 @@ export default {
 </script>
 
 <style scoped>
-.home {
+/* .home {
   display: flex;
   flex-direction: column;
   gap: 30px;
-}
+} */
 </style>

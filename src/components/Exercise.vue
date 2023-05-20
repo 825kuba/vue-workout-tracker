@@ -1,5 +1,8 @@
 <template>
-  <li class="exercise" @click="checkExercise">
+  <li
+    :class="`exercise ${checkIfChecked ? 'checked' : ''}`"
+    @click="checkExercise"
+  >
     <span class="exercise__letter">{{ firstLetter }}</span>
     <div class="exercise__content">
       <p class="name">
@@ -48,11 +51,12 @@ export default {
   border-bottom: 1px solid gray;
   padding: 15px 10px;
   cursor: pointer;
-  // transition: 0.15s ease-in-out background-color;
 
   &:hover {
     background-color: rgb(241, 241, 241);
-    // background-color: rgb(77, 77, 248, 0.1);
+  }
+  &.checked {
+    background-color: rgb(241, 241, 241);
   }
 
   &:first-of-type {

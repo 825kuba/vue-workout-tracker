@@ -61,15 +61,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/* h1 {
-  margin-bottom: 20px;
-}
-
-aside {
-  margin-bottom: 30px;
-} */
-
-.exercises,
 aside {
   display: flex;
   flex-direction: column;

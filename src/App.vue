@@ -7,6 +7,7 @@
   <router-view
     :exercises="exercises"
     :workout="workout"
+    :history="history"
     @add-exercise="addExercise"
     :showAddNew="showAddNew"
     @toggle-show-add-new="toggleShowAddNew"
@@ -19,6 +20,8 @@
     @add-exercises-to-workout="addExercisesToWorkout"
     @update-exercise-sets="updateExerciseSets"
     @finish-workout="finishWorkout"
+    @check-workout="checkWorkout"
+    @delete-workouts="deleteWorkouts"
   />
 </template>
 
@@ -129,6 +132,7 @@ export default {
       this.isWorkingOut = true;
       this.workout.startTime = Date.now();
       this.workout.exercises = [];
+      this.workout.checked = false;
       console.log(this.workout);
     },
     endWorkout() {
@@ -202,6 +206,15 @@ export default {
       this.endWorkout();
       console.log('history: ', this.history);
     },
+    checkWorkout(workout) {
+      const index = this.history.findIndex(item => item.id === workout.id);
+      this.history[index].checked = !this.history[index].checked;
+      console.log(this.history);
+    },
+    deleteWorkouts() {
+      alert('Delete selected?');
+      this.history = this.history.filter(item => !item.checked);
+    },
   },
 };
 </script>
@@ -238,6 +251,9 @@ nav {
 .history,
 .home {
   padding: 0 30px 90px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 ul {
