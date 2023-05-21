@@ -18,7 +18,7 @@
         <option value="strength">Strength Training</option>
       </select>
     </fieldset>
-    <Button text="Add exercise" styles="green"></Button>
+    <Button type="submit" text="Add exercise" styles="green"></Button>
   </form>
 </template>
 

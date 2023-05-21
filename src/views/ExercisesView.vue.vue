@@ -3,6 +3,7 @@
     <h1>List of exercises</h1>
     <aside>
       <Button
+      type="button"
         :text="`${showAddNew ? 'Cancel' : 'Add New Excercise'}`"
         :styles="`${showAddNew ? 'red' : 'green'}`"
         @btn-click="$emit('toggle-show-add-new')"
@@ -10,8 +11,13 @@
       <AddExercise v-if="showAddNew" @add-exercise="emitAddExercise" />
     </aside>
     <main>
-      <Exercises :exercises="exercises" @check-exercise="emitCheckExercise" />
+      <Exercises
+        :exercises="exercises"
+        @check-exercise="emitCheckExercise"
+        :isFetchingData="isFetchingData"
+      />
       <Button
+      type="button"
         v-if="checkIfSomeChecked"
         text="Delete selected exercises"
         styles="red floating"
@@ -43,6 +49,7 @@ export default {
   props: {
     exercises: Array,
     showAddNew: Boolean,
+    isFetchingData: Boolean,
   },
   methods: {
     emitAddExercise(obj) {

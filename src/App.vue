@@ -8,6 +8,7 @@
     :exercises="exercises"
     :workout="workout"
     :history="history"
+    :isFetchingData="isFetchingData"
     @add-exercise="addExercise"
     :showAddNew="showAddNew"
     @toggle-show-add-new="toggleShowAddNew"
@@ -34,89 +35,21 @@ export default {
       showAddNew: false,
       isWorkingOut: false,
       isSelectingExercise: false,
+      isFetchingData: false,
       workout: {},
       history: [],
-      exercises: [
-        {
-          name: 'Running',
-          type: 'cardio',
-          id: uuidv4(),
-          checked: {
-            forDelete: false,
-            forAdd: false,
-          },
-          properties: {
-            time: '',
-            km: '',
-          },
-        },
-        {
-          name: 'Push up',
-          type: 'strength',
-          id: uuidv4(),
-          checked: {
-            forDelete: false,
-            forAdd: false,
-          },
-          properties: {
-            kg: '',
-            reps: '',
-          },
-        },
-        {
-          name: 'Cycling',
-          type: 'cardio',
-          id: uuidv4(),
-          checked: {
-            forDelete: false,
-            forAdd: false,
-          },
-          properties: {
-            time: '',
-            km: '',
-          },
-        },
-        {
-          name: 'Squat',
-          type: 'strength',
-          id: uuidv4(),
-          checked: {
-            forDelete: false,
-            forAdd: false,
-          },
-          properties: {
-            kg: '',
-            reps: '',
-          },
-        },
-        {
-          name: 'Deadlift',
-          type: 'strength',
-          id: uuidv4(),
-          checked: {
-            forDelete: false,
-            forAdd: false,
-          },
-          properties: {
-            kg: '',
-            reps: '',
-          },
-        },
-        {
-          name: 'Pull up',
-          type: 'strength',
-          id: uuidv4(),
-          checked: {
-            forDelete: false,
-            forAdd: false,
-          },
-          properties: {
-            kg: '',
-            reps: '',
-          },
-        },
-      ],
+      exercises: [],
     };
+  },
+  async created() {
+    const exercises = await this.getData('exercises');
+    if (exercises) {
+      this.exercises = [...exercises];
+    }
+    const history = await this.getData('history');
+    if (history) {
+      this.history = [...history];
+    }
   },
   methods: {
     toggleShowAddNew() {
@@ -152,8 +85,8 @@ export default {
       if (this.isSelectingExercise) this.unselectedExercises();
       this.isSelectingExercise = !this.isSelectingExercise;
     },
-    addExercise(data) {
-      const newExercise = data;
+    async addExercise(data) {
+      const newExercise = { ...data };
       newExercise.id = uuidv4();
       newExercise.checked = {
         forDelete: false,
@@ -161,17 +94,20 @@ export default {
       };
       if (newExercise.type === 'strength') {
         newExercise.properties = {
-          kg: '',
-          reps: '',
+          kg: '0',
+          reps: '0',
         };
       } else if (newExercise.type === 'cardio') {
         newExercise.properties = {
-          time: '',
-          km: '',
+          time: '0:00',
+          km: '0',
         };
       }
-      this.exercises = [...this.exercises, data];
+
+      this.exercises = [...this.exercises, newExercise];
       console.log('exercises: ', this.exercises);
+
+      await this.postData('exercises', newExercise);
     },
     checkExercise(exercise, parent) {
       const index = this.exercises.findIndex(item => item.id === exercise.id);
@@ -183,9 +119,10 @@ export default {
           !this.exercises[index].checked.forAdd;
       }
     },
-    deleteExercises() {
+    async deleteExercises() {
       if (confirm('Delete selected?')) {
         this.exercises = this.exercises.filter(item => !item.checked.forDelete);
+        await this.updateData('exercises', this.exercises);
       }
     },
     addExercisesToWorkout() {
@@ -210,22 +147,10 @@ export default {
       this.workout.exercises[index].sets = exercise.sets;
       console.log('updated sets:', this.workout);
     },
-    finishWorkout() {
+    async finishWorkout() {
       this.workout.finishTime = Date.now();
-      // check if there's any empty sets
-      // 1) map through all exercises
-      this.workout.exercises = this.workout.exercises.map(exercise => {
-        // 2) for each exercise filter it's sets
-        const filteredSets = exercise.sets.filter(set => {
-          // 3) for each set.properties obj check if ALL of it's values are empty
-          return Object.values(set.properties).every(
-            property => property !== ''
-          );
-        });
-        // 4) return new exercise obj with filtered sets
-        return { ...exercise, sets: filteredSets };
-      });
       this.history.push(this.workout);
+      await this.postData('history', this.workout);
       this.endWorkout();
       console.log('history: ', this.history);
     },
@@ -234,9 +159,64 @@ export default {
       this.history[index].checked = !this.history[index].checked;
       console.log('history: ', this.history);
     },
-    deleteWorkouts() {
+    async deleteWorkouts() {
       if (confirm('Delete selected?')) {
         this.history = this.history.filter(item => !item.checked);
+        await this.updateData('history', this.history);
+      }
+    },
+    async getData(url) {
+      try {
+        this.isFetchingData = true;
+        const response = await fetch(
+          `https://workout-tracker-fb5f9-default-rtdb.europe-west1.firebasedatabase.app/${url}.json`
+        );
+        if (!response.ok) throw new Error('Something went wrong');
+        const data = await response.json();
+        if (!data) {
+          this.isFetchingData = false;
+          return null;
+        }
+        const dataArr = Object.values(data);
+        this.isFetchingData = false;
+        return dataArr;
+      } catch (err) {
+        this.isFetchingData = false;
+        alert(err.message);
+      }
+    },
+    async postData(url, data) {
+      try {
+        const response = await fetch(
+          `https://workout-tracker-fb5f9-default-rtdb.europe-west1.firebasedatabase.app/${url}.json`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          }
+        );
+        if (!response.ok) throw new Error('Something went wrong');
+      } catch (err) {
+        alert(err.message);
+      }
+    },
+    async updateData(url, data) {
+      try {
+        const res = await fetch(
+          `https://workout-tracker-fb5f9-default-rtdb.europe-west1.firebasedatabase.app/${url}.json`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          }
+        );
+        if (!res.ok) throw new Error('Something went wrong');
+      } catch (err) {
+        alert(err.message);
       }
     },
   },

@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <Button
+      type="button"
       :text="`${isWorkingOut ? 'Cancel workout' : 'Start workout'}`"
       :styles="`${isWorkingOut ? 'red' : 'blue'} big-font`"
       @btn-click="$emit('toggle-isWorkingOut')"
@@ -12,6 +13,7 @@
       @delete-exercise-from-workout="emitDeleteExerciseFromWorkout"
     />
     <Button
+      type="button"
       v-if="isWorkingOut"
       :text="`${isSelectingExercise ? 'Cancel' : 'Add exercise'}`"
       :styles="`${isSelectingExercise ? 'red' : 'green'}`"
@@ -25,6 +27,7 @@
         :workout="workout"
       />
       <Button
+        type="button"
         v-if="checkIfSomeChecked"
         text="Add exercises to workout"
         styles="green floating"
@@ -33,7 +36,8 @@
       ></Button>
     </aside>
     <Button
-      v-if="isWorkingOut && workout.exercises.length"
+      type="button"
+      v-if="isWorkingOut && workout.exercises.length && !isSelectingExercise"
       text="Finish workout"
       class="blue big-font"
       @btn-click="$emit('finish-workout')"

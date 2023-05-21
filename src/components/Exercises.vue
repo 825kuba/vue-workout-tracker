@@ -6,6 +6,10 @@
       :exercise="exercise"
       @check-exercise="emitCheckExercise"
     />
+    <h2 v-if="isFetchingData">Loading exercises...</h2>
+    <h2 v-if="!isFetchingData && !exercises.length">
+      No exercises. Start by adding some!
+    </h2>
   </ul>
 </template>
 
@@ -19,6 +23,7 @@ export default {
   },
   props: {
     exercises: Array,
+    isFetchingData: Boolean,
   },
   emits: ['check-exercise'],
   methods: {

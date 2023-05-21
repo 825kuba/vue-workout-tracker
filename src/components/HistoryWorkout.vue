@@ -161,6 +161,7 @@ export default {
   &__name {
     font-weight: bold;
     margin-bottom: 10px;
+    text-transform: capitalize;
   }
 }
 

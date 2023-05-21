@@ -4,15 +4,20 @@
       <h1>Workout history</h1>
       <ul>
         <HistoryWorkout
-          v-for="workout in history"
+          v-for="workout in history.slice().reverse()"
           :workout="workout"
           :key="workout.id"
           @check-workout="emitCheckWorkout"
         />
       </ul>
+      <h2 v-if="isFetchingData">Loading workout history...</h2>
+      <h2 v-if="!isFetchingData && !history.length">
+        Start a workout to see your history!
+      </h2>
     </main>
     <aside>
       <Button
+        type="button"
         v-if="checkIfSomeChecked"
         text="Delete selected workouts"
         styles="red floating"
@@ -35,6 +40,7 @@ export default {
   },
   props: {
     history: Array,
+    isFetchingData: Boolean,
   },
   emits: ['check-workout', 'delete-workouts'],
   methods: {

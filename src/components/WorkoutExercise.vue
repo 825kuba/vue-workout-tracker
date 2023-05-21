@@ -28,11 +28,18 @@
               type="text"
               :id="objKey"
               v-model="sets[index].properties[objKey]"
+              @focus="focusInput"
+              @blur="blurInput"
             />
           </td>
         </tr>
       </table>
-      <Button text="+ Add set" class="gray" @btn-click="addSet"></Button>
+      <Button
+        type="submit"
+        text="+ Add set"
+        class="gray"
+        @btn-click="addSet"
+      ></Button>
     </form>
   </li>
 </template>
@@ -57,15 +64,38 @@ export default {
   },
   methods: {
     addSet() {
+      // if (this.sets.length > 0) {
+      //   const properties = Object.entries(
+      //     this.sets[this.counter - 1].properties
+      //   );
+      //   properties.forEach(prop => {
+      //     if (prop[1] === '') {
+      //       this.sets[this.counter - 1].properties[prop[0]] =
+      //         prop[0] === 'time' ? '0:00' : '0';
+      //     }
+      //   });
+      //   console.log(this.sets);
+      // }
+
+      this.counter++;
       const set = {
-        index: this.counter + 1,
+        index: this.counter,
         properties: { ...this.exercise.properties },
       };
       this.sets.push(set);
-      this.counter++;
     },
     deleteExerciseFromWorkout() {
       this.$emit('delete-exercise-from-workout', this.exercise);
+    },
+    focusInput(e) {
+      if (e.target.value === '0' || e.target.value === '0:00') {
+        e.target.value = '';
+      }
+    },
+    blurInput(e) {
+      if (e.target.value === '') {
+        e.target.value = e.target.id === 'time' ? '0:00' : '0';
+      }
     },
   },
   created() {

@@ -50,17 +50,16 @@ button {
 
   &.floating {
     position: fixed;
-    left: 50;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
     box-shadow: 0px 10px 10px -3px rgba(0, 0, 0, 0.5);
     bottom: 20px;
     width: calc(100% - 60px);
     margin: 0 auto;
-
     transition: 0.1s ease-in-out transform;
 
     &:hover {
-      transform: translate(-50%, -2px);
+      transform: translateY(-2px);
     }
   }
 
