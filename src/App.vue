@@ -191,7 +191,7 @@ export default {
     addExercisesToWorkout() {
       this.exercises.forEach(item => {
         if (item.checked.forAdd) {
-          const newItem = { ...item, id: uuidv4() };
+          const newItem = { ...item, id: uuidv4(), sets: [] };
           this.workout.exercises.push(newItem);
         }
       });

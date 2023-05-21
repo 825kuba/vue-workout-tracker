@@ -67,6 +67,9 @@ export default {
       this.$emit('delete-exercise-from-workout', this.exercise);
     },
   },
+  created() {
+    this.sets = this.exercise.sets;
+  },
   updated() {
     const updatedExercise = { ...this.exercise, sets: this.sets };
     this.$emit('update-exercise-sets', updatedExercise);
