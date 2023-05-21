@@ -18,6 +18,7 @@
     @check-exercise="checkExercise"
     @delete-exercises="deleteExercises"
     @add-exercises-to-workout="addExercisesToWorkout"
+    @delete-exercise-from-workout="deleteExerciseFromWorkout"
     @update-exercise-sets="updateExerciseSets"
     @finish-workout="finishWorkout"
     @check-workout="checkWorkout"
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid';
 export default {
   data() {
     return {
@@ -38,7 +40,7 @@ export default {
         {
           name: 'Running',
           type: 'cardio',
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -51,7 +53,7 @@ export default {
         {
           name: 'Push up',
           type: 'strength',
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -64,7 +66,7 @@ export default {
         {
           name: 'Cycling',
           type: 'cardio',
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -77,7 +79,7 @@ export default {
         {
           name: 'Squat',
           type: 'strength',
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -90,7 +92,7 @@ export default {
         {
           name: 'Deadlift',
           type: 'strength',
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -103,7 +105,7 @@ export default {
         {
           name: 'Pull up',
           type: 'strength',
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           checked: {
             forDelete: false,
             forAdd: false,
@@ -122,8 +124,9 @@ export default {
     },
     toggleIsWorkingOut() {
       if (this.isWorkingOut) {
-        alert('Cancel workout?');
-        this.endWorkout();
+        if (confirm('Cancel workout?')) {
+          this.endWorkout();
+        }
       } else {
         this.startWorkout();
       }
@@ -132,7 +135,7 @@ export default {
       this.isWorkingOut = true;
       this.workout.startTime = Date.now();
       this.workout.exercises = [];
-      this.workout.id = crypto.randomUUID();
+      this.workout.id = uuidv4();
       this.workout.checked = false;
       console.log('current workout: ', this.workout);
     },
@@ -151,7 +154,7 @@ export default {
     },
     addExercise(data) {
       const newExercise = data;
-      newExercise.id = crypto.randomUUID();
+      newExercise.id = uuidv4();
       newExercise.checked = {
         forDelete: false,
         forAdd: false,
@@ -181,18 +184,24 @@ export default {
       }
     },
     deleteExercises() {
-      alert('Delete selected?');
-      this.exercises = this.exercises.filter(item => !item.checked.forDelete);
+      if (confirm('Delete selected?')) {
+        this.exercises = this.exercises.filter(item => !item.checked.forDelete);
+      }
     },
     addExercisesToWorkout() {
       this.exercises.forEach(item => {
         if (item.checked.forAdd) {
-          const newItem = { ...item, id: crypto.randomUUID() };
+          const newItem = { ...item, id: uuidv4() };
           this.workout.exercises.push(newItem);
         }
       });
       console.log('workout exercises:', this.workout.exercises);
       this.toggleIsSelectingExercise();
+    },
+    deleteExerciseFromWorkout(exercise) {
+      this.workout.exercises = this.workout.exercises.filter(
+        item => item.id !== exercise.id
+      );
     },
     updateExerciseSets(exercise) {
       const index = this.workout.exercises.findIndex(
@@ -213,8 +222,9 @@ export default {
       console.log('history: ', this.history);
     },
     deleteWorkouts() {
-      alert('Delete selected?');
-      this.history = this.history.filter(item => !item.checked);
+      if (confirm('Delete selected?')) {
+        this.history = this.history.filter(item => !item.checked);
+      }
     },
   },
 };
@@ -270,8 +280,7 @@ button {
   max-width: calc(768px - 60px);
 }
 
-#app,
-button {
+#app {
   margin: 0 auto;
 }
 </style>

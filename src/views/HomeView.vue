@@ -9,6 +9,7 @@
       v-if="isWorkingOut"
       :workout="workout"
       @update-exercise-sets="emitUpdateExerciseSets"
+      @delete-exercise-from-workout="emitDeleteExerciseFromWorkout"
     />
     <Button
       v-if="isWorkingOut"
@@ -65,6 +66,7 @@ export default {
     'add-exercises-to-workout',
     'finish-workout',
     'update-exercise-sets',
+    'delete-exercise-from-workout',
   ],
   methods: {
     emitCheckExercise(exercise, parent) {
@@ -72,6 +74,9 @@ export default {
     },
     emitUpdateExerciseSets(exercise) {
       this.$emit('update-exercise-sets', exercise);
+    },
+    emitDeleteExerciseFromWorkout(exercise) {
+      this.$emit('delete-exercise-from-workout', exercise);
     },
   },
   computed: {

@@ -1,7 +1,14 @@
 <template>
   <li class="exercise">
     <form @submit.prevent action="">
-      <p class="exercise__name">{{ exercise.name }}</p>
+      <div :class="`exercise__heading ${sets.length ? '' : 'margin'}`">
+        <p class="exercise__name">{{ exercise.name }}</p>
+        <Button
+          text="Delete"
+          class="red narrow"
+          @btn-click="deleteExerciseFromWorkout"
+        ></Button>
+      </div>
       <table v-if="sets.length">
         <tr>
           <td>&nbsp;</td>
@@ -40,7 +47,7 @@ export default {
   props: {
     exercise: Object,
   },
-  emits: ['update-exercise-sets'],
+  emits: ['update-exercise-sets', 'delete-exercise-from-workout'],
   data() {
     return {
       sets: [],
@@ -56,6 +63,9 @@ export default {
       this.sets.push(set);
       this.counter++;
     },
+    deleteExerciseFromWorkout() {
+      this.$emit('delete-exercise-from-workout', this.exercise);
+    },
   },
   updated() {
     const updatedExercise = { ...this.exercise, sets: this.sets };
@@ -70,11 +80,33 @@ export default {
     margin-bottom: 30px;
   }
 
+  &__heading {
+    display: flex;
+    justify-content: space-between;
+
+    &.margin {
+      margin-bottom: 5px;
+    }
+
+    & Button.narrow {
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s ease-in-out opacity;
+    }
+    &:hover {
+      Button.narrow {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
   &__name {
     font-weight: bold;
     text-align: left;
     font-size: 17px;
     text-transform: capitalize;
+    padding: 5px 0;
   }
 
   &__properties {
@@ -101,13 +133,8 @@ export default {
 
   & table {
     width: 100%;
-
     border-collapse: separate;
     border-spacing: 0 10px;
-
-    & tr {
-      padding: 5px 0;
-    }
   }
 }
 </style>

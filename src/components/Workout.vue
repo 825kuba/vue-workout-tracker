@@ -5,6 +5,7 @@
       :exercise="exercise"
       :key="exercise.id"
       @update-exercise-sets="emitUpdateExerciseSets"
+      @delete-exercise-from-workout="emitDeleteExerciseFromWorkout"
     />
   </ul>
 </template>
@@ -20,10 +21,13 @@ export default {
   props: {
     workout: Object,
   },
-  emits: ['update-exercise-sets'],
+  emits: ['update-exercise-sets', 'delete-exercise-from-workout'],
   methods: {
     emitUpdateExerciseSets(exercise) {
       this.$emit('update-exercise-sets', exercise);
+    },
+    emitDeleteExerciseFromWorkout(exercise) {
+      this.$emit('delete-exercise-from-workout', exercise);
     },
   },
 };

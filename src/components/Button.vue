@@ -41,6 +41,10 @@ button {
     color: black;
   }
 
+  &.transparent {
+    background-color: transparent;
+  }
+
   &.floating {
     position: fixed;
     left: 50;
@@ -48,6 +52,8 @@ button {
     box-shadow: 0px 10px 10px -3px rgba(0, 0, 0, 0.5);
     bottom: 20px;
     width: calc(100% - 60px);
+    margin: 0 auto;
+
     transition: 0.1s ease-in-out transform;
 
     &:hover {
@@ -59,6 +65,11 @@ button {
     font-size: 18px;
     text-transform: uppercase;
     letter-spacing: 1px;
+  }
+
+  &.narrow {
+    padding: 0 20px;
+    width: initial;
   }
 }
 </style>
