@@ -40,8 +40,11 @@
       v-if="isWorkingOut && workout.exercises.length && !isSelectingExercise"
       text="Finish workout"
       class="blue big-font"
-      @btn-click="$emit('finish-workout')"
+      @btn-click="finishWorkout"
     ></Button>
+    <h2 v-if="!isWorkingOut && isShowingMessage">
+      Your workout has been saved!
+    </h2>
   </div>
 </template>
 
@@ -72,6 +75,12 @@ export default {
     'update-exercise-sets',
     'delete-exercise-from-workout',
   ],
+  data() {
+    return {
+      isShowingMessage: false,
+      timer: null,
+    };
+  },
   methods: {
     emitCheckExercise(exercise, parent) {
       this.$emit('check-exercise', exercise, parent);
@@ -82,6 +91,17 @@ export default {
     emitDeleteExerciseFromWorkout(exercise) {
       this.$emit('delete-exercise-from-workout', exercise);
     },
+    finishWorkout() {
+      this.$emit('finish-workout');
+      this.showMessage();
+    },
+    showMessage() {
+      clearTimeout(this.timer);
+      this.isShowingMessage = true;
+      setTimeout(() => {
+        this.isShowingMessage = false;
+      }, 5000);
+    },
   },
   computed: {
     checkIfSomeChecked() {
@@ -91,10 +111,4 @@ export default {
 };
 </script>
 
-<style scoped>
-/* .home {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-} */
-</style>
+<style scoped lang="scss"></style>
