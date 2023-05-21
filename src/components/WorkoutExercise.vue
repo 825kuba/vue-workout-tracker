@@ -34,12 +34,21 @@
           </td>
         </tr>
       </table>
-      <Button
-        type="submit"
-        text="+ Add set"
-        class="gray"
-        @btn-click="addSet"
-      ></Button>
+      <div class="exercise__btns">
+        <Button
+          type="submit"
+          :text="`+ ${sets.length ? '' : 'Add'} set`"
+          :class="`gray ${sets.length ? 'clipped-left' : ''}`"
+          @btn-click="addSet"
+        ></Button>
+        <Button
+          v-if="sets.length"
+          type="button"
+          text="- set"
+          class="red clipped-right"
+          @btn-click="removeSet"
+        ></Button>
+      </div>
     </form>
   </li>
 </template>
@@ -64,25 +73,16 @@ export default {
   },
   methods: {
     addSet() {
-      // if (this.sets.length > 0) {
-      //   const properties = Object.entries(
-      //     this.sets[this.counter - 1].properties
-      //   );
-      //   properties.forEach(prop => {
-      //     if (prop[1] === '') {
-      //       this.sets[this.counter - 1].properties[prop[0]] =
-      //         prop[0] === 'time' ? '0:00' : '0';
-      //     }
-      //   });
-      //   console.log(this.sets);
-      // }
-
       this.counter++;
       const set = {
         index: this.counter,
         properties: { ...this.exercise.properties },
       };
       this.sets.push(set);
+    },
+    removeSet() {
+      this.sets = this.sets.filter(set => set.index !== this.counter);
+      this.counter--;
     },
     deleteExerciseFromWorkout() {
       this.$emit('delete-exercise-from-workout', this.exercise);
@@ -104,6 +104,7 @@ export default {
   updated() {
     const updatedExercise = { ...this.exercise, sets: this.sets };
     this.$emit('update-exercise-sets', updatedExercise);
+    console.log(this.counter);
   },
 };
 </script>
@@ -179,6 +180,10 @@ export default {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
+  }
+
+  &__btns {
+    display: flex;
   }
 }
 </style>

@@ -73,5 +73,16 @@ button {
     padding: 0 20px;
     width: initial;
   }
+
+  &.clipped-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    clip-path: polygon(0 0, 100% 0%, 95% 100%, 0% 100%);
+  }
+  &.clipped-right {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    clip-path: polygon(5% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
 }
 </style>
