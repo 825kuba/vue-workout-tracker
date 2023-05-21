@@ -24,6 +24,7 @@ button {
   padding: 10px 20px;
   font-size: 1rem;
   width: 100%;
+  max-width: calc(768px - 60px);
 
   &.green {
     background-color: #42b983;

@@ -3,13 +3,17 @@
     :class="`exercise ${checkIfChecked ? 'checked' : ''}`"
     @click="checkExercise"
   >
+    <!-- first letter of exercise name displayed in big font -->
     <span class="exercise__letter">{{ firstLetter }}</span>
     <div class="exercise__content">
+      <!-- exercise name -->
       <p class="name">
         {{ exercise.name }}
       </p>
+      <!-- exercise type -->
       <p class="type">{{ exercise.type }}</p>
     </div>
+    <!-- tick symbol displayed if exercise checked -->
     <span v-if="checkIfChecked" class="exercise__tick">✔</span>
   </li>
 </template>
@@ -28,16 +32,19 @@ export default {
   },
   methods: {
     checkExercise() {
+      // get parent's parent name
       const parent = `${this.$parent.$parent.$options.name}`;
       this.$emit('check-exercise', this.exercise, parent);
     },
   },
   computed: {
     checkIfChecked() {
+      // get parent's parent name
       const parent = this.$parent.$parent.$options.name;
+      // based on the parent return the correct check value
       if (parent === 'ExercisesView') {
         return this.exercise.checked.forDelete;
-      } else if (parent === 'HomeView') {
+      } else if (parent === 'WorkoutView') {
         return this.exercise.checked.forAdd;
       } else return false;
     },

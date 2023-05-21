@@ -6,7 +6,9 @@
       :exercise="exercise"
       @check-exercise="emitCheckExercise"
     />
+    <!-- loading message -->
     <h2 v-if="isFetchingData">Loading exercises...</h2>
+    <!-- empty list message -->
     <h2 v-if="!isFetchingData && !exercises.length">
       No exercises. Start by adding some!
     </h2>
@@ -34,7 +36,3 @@ export default {
 };
 </script>
 
-<style scoped>
-/* .exercises {
-} */
-</style>

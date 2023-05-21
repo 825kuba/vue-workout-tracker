@@ -3,9 +3,11 @@
     :class="`workout ${checkIfChecked ? 'checked' : ''}`"
     @click="emitCheckWorkout"
   >
+    <!-- workout header -->
     <div class="workout__header">
       <p class="workout__heading">
         <strong>{{ getWorkoutTimes.title }}</strong>
+        <!-- renders if workout clicked(checked) -->
         <span v-if="checkIfChecked" class="workout__tick">✔</span>
       </p>
       <p>
@@ -18,11 +20,16 @@
         </span>
       </p>
     </div>
+    <!-- main workout data containing exercises and sets -->
     <div class="workout__content">
       <div v-for="(exercise, i) in workout.exercises" :key="i" class="exercise">
+        <!-- exercise name -->
         <p class="exercise__name">{{ exercise.name }}</p>
+        <!-- exercise set -->
         <p v-for="set in exercise.sets" :key="set.index" class="set">
+          <!-- set index number -->
           <span class="set__index">{{ set.index }}</span>
+          <!-- exercise properties for given set -->
           <span
             v-for="(objKey, i) in Object.keys(set.properties)"
             :key="i"
@@ -66,7 +73,7 @@ export default {
       if (hours >= 4 && hours < 12) title = 'Morning workout';
       else if (hours >= 12 && hours < 18) title = 'Afternoon workout';
       else if (hours >= 18 && hours < 22) title = 'Evening workout';
-      else if (hours >= 22 && hours < 4) title = 'Night workout';
+      else if (hours >= 22 || hours < 4) title = 'Night workout';
 
       // set date string
       const date = startingTime.toLocaleDateString('en-GB', {
@@ -111,8 +118,12 @@ export default {
 <style scoped lang="scss">
 .workout {
   cursor: pointer;
-  border-bottom: 1px solid gray;
   padding: 15px;
+  border-bottom: 1px solid gray;
+
+  &:first-of-type {
+    border-top: 1px solid gray;
+  }
 
   &:hover {
     background-color: rgb(241, 241, 241);
@@ -120,10 +131,6 @@ export default {
 
   &.checked {
     background-color: rgb(241, 241, 241);
-  }
-
-  &:first-of-type {
-    border-top: 1px solid gray;
   }
 
   &__heading {

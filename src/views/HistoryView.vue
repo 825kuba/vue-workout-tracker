@@ -2,6 +2,8 @@
   <div class="history">
     <main>
       <h1>Workout history</h1>
+
+      <!-- render list in reverse - to show the latest workout first -->
       <ul>
         <HistoryWorkout
           v-for="workout in history.slice().reverse()"
@@ -10,11 +12,15 @@
           @check-workout="emitCheckWorkout"
         />
       </ul>
+
+      <!-- loading message -->
       <h2 v-if="isFetchingData">Loading workout history...</h2>
+      <!-- empty list message -->
       <h2 v-if="!isFetchingData && !history.length">
         Start a workout to see your history!
       </h2>
     </main>
+    <!-- delete btn -->
     <aside>
       <Button
         type="button"
@@ -57,6 +63,13 @@ export default {
 </script>
 
 <style scoped>
+.history {
+  padding: 0 30px 90px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 main {
   display: flex;
   flex-direction: column;

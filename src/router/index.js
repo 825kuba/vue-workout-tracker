@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import WorkoutView from '../views/WorkoutView.vue';
 import HistoryView from '@/views/HistoryView.vue';
 import ExercisesView from '@/views/ExercisesView.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView,
+    name: 'workout',
+    component: WorkoutView,
   },
   {
     path: '/history',

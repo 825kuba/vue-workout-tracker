@@ -39,16 +39,20 @@ export default {
   },
   methods: {
     createExercise() {
+      // simple form validation
       if (this.newName === '' || this.newType === '') {
         alert('Please enter all the exercise details!');
         return;
       }
+      // prepare object structure
       const newExercise = {
         name: this.newName,
         type: this.newType,
       };
+      // reset model Value
       this.newName = '';
       this.newType = '';
+      // emit new exercise
       this.$emit('add-exercise', newExercise);
     },
   },

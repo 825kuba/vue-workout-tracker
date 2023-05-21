@@ -1,5 +1,5 @@
 <template>
-  <ul class="workout">
+  <ul>
     <WorkoutExercise
       v-for="exercise in workout.exercises"
       :exercise="exercise"
@@ -32,8 +32,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-// .workout {
-// }
-</style>

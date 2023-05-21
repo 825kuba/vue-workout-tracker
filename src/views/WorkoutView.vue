@@ -1,17 +1,22 @@
 <template>
-  <div class="home">
+  <div class="workout">
+    <!-- big blue btn -->
     <Button
       type="button"
       :text="`${isWorkingOut ? 'Cancel workout' : 'Start workout'}`"
       :styles="`${isWorkingOut ? 'red' : 'blue'} big-font`"
       @btn-click="$emit('toggle-isWorkingOut')"
     ></Button>
+
+    <!-- this is where exercises and sets are rendered -->
     <Workout
       v-if="isWorkingOut"
       :workout="workout"
       @update-exercise-sets="emitUpdateExerciseSets"
       @delete-exercise-from-workout="emitDeleteExerciseFromWorkout"
     />
+
+    <!-- add more exercises btn -->
     <Button
       type="button"
       v-if="isWorkingOut"
@@ -19,7 +24,9 @@
       :styles="`${isSelectingExercise ? 'red' : 'green'}`"
       @btn-click="$emit('toggle-isSelectingExercise')"
     ></Button>
+
     <aside>
+      <!-- the exercises list -->
       <Exercises
         v-if="isWorkingOut && isSelectingExercise"
         :exercises="exercises"
@@ -35,6 +42,8 @@
         class="floating"
       ></Button>
     </aside>
+
+    <!-- finish workout btn -->
     <Button
       type="button"
       v-if="isWorkingOut && workout.exercises.length && !isSelectingExercise"
@@ -42,6 +51,8 @@
       class="blue big-font"
       @btn-click="finishWorkout"
     ></Button>
+
+    <!-- timed message -->
     <h2 v-if="!isWorkingOut && isShowingMessage">
       Your workout has been saved!
     </h2>
@@ -54,7 +65,7 @@ import Exercises from '@/components/Exercises.vue';
 import Workout from '@/components/Workout.vue';
 
 export default {
-  name: 'HomeView',
+  name: 'WorkoutView',
   components: {
     Button,
     Exercises,
@@ -111,4 +122,11 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped>
+.workout {
+  padding: 0 30px 90px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+</style>
