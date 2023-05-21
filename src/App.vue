@@ -212,6 +212,19 @@ export default {
     },
     finishWorkout() {
       this.workout.finishTime = Date.now();
+      // check if there's any empty sets
+      // 1) map through all exercises
+      this.workout.exercises = this.workout.exercises.map(exercise => {
+        // 2) for each exercise filter it's sets
+        const filteredSets = exercise.sets.filter(set => {
+          // 3) for each set.properties obj check if ALL of it's values are empty
+          return Object.values(set.properties).every(
+            property => property !== ''
+          );
+        });
+        // 4) return new exercise obj with filtered sets
+        return { ...exercise, sets: filteredSets };
+      });
       this.history.push(this.workout);
       this.endWorkout();
       console.log('history: ', this.history);

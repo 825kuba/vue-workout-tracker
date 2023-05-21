@@ -6,6 +6,7 @@
         <Button
           text="Delete"
           class="red narrow"
+          type="button"
           @btn-click="deleteExerciseFromWorkout"
         ></Button>
       </div>
@@ -122,7 +123,7 @@ export default {
     }
 
     & th,
-    input {
+    & input {
       background-color: rgb(199, 199, 199);
       border-radius: 5px;
     }
@@ -131,6 +132,16 @@ export default {
       border: none;
       padding: 5px 10px;
       text-align: center;
+
+      @media screen and (max-width: 470px) {
+        max-width: 100px;
+      }
+      @media screen and (max-width: 320px) {
+        max-width: 80px;
+      }
+      @media screen and (max-width: 270px) {
+        max-width: 50px;
+      }
     }
   }
 

@@ -1,5 +1,7 @@
 <template>
-  <button @click="$emit('btn-click')" :class="styles">{{ text }}</button>
+  <button @click="$emit('btn-click')" :class="styles" :type="type">
+    {{ text }}
+  </button>
 </template>
 
 <script>
@@ -8,6 +10,7 @@ export default {
   props: {
     text: String,
     styles: String,
+    type: String,
   },
   emits: ['btn-click'],
 };
